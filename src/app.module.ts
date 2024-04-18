@@ -2,6 +2,7 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
 import { AppService } from "@/app.service";
+import { AuthModule } from "@/auth/auth.module";
 import { AppController } from "@/app.controller";
 import configuration from "@/config/configuration";
 import { validate } from "@/config/env.validation";
@@ -15,6 +16,7 @@ import { validate } from "@/config/env.validation";
       cache: true,
       validate,
     }),
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
