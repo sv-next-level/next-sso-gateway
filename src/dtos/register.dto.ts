@@ -1,5 +1,4 @@
-import { PORTAL } from "@/const";
-import { EMAIL_BLACKLISTED_CHARS } from "@/const/error.const";
+import { EMAIL_BLACKLISTED_CHARS, PORTAL } from "@/constants";
 import {
   ArrayNotEmpty,
   IsEmail,

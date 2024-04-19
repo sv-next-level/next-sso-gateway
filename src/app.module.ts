@@ -4,8 +4,9 @@ import { ConfigModule } from "@nestjs/config";
 import { AppService } from "@/app.service";
 import { AuthModule } from "@/auth/auth.module";
 import { AppController } from "@/app.controller";
-import configuration from "@/config/configuration";
+import configuration from "@/config";
 import { validate } from "@/config/env.validation";
+import { DatabaseModule } from "./infra/mongoose/database.module";
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { validate } from "@/config/env.validation";
       validate,
     }),
     AuthModule,
+    DatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

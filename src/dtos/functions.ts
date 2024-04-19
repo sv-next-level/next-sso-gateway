@@ -1,5 +1,7 @@
-import { EMAIL_BLACKLISTED_CHARS } from "@/const/error.const";
-import { emailBlacklistedCharsRegex } from "@/const/regexp.const";
+import {
+  EMAIL_BLACKLISTED_CHARS,
+  emailBlacklistedCharsRegex,
+} from "@/constants";
 import { ValidationArguments } from "class-validator";
 
 export const getEmailErrorMessage = (
