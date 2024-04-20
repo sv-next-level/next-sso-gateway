@@ -1,17 +1,13 @@
 import { LoginDTO, RegisterDTO } from "@/dtos";
-import {
-  Body,
-  Controller,
-  Logger,
-  Post,
-  UnauthorizedException,
-} from "@nestjs/common";
+import { OK, Unauthorized } from "@/utils";
+import { Body, Controller, Logger, Post } from "@nestjs/common";
+import { AuthService } from "@/auth/auth.service";
 
 @Controller("auth")
 export class AuthController {
   private logger: Logger = new Logger("auth.controller");
 
-  constructor() {
+  constructor(private readonly authService: AuthService) {
     this.logger.debug({
       message: "Entering constructor of auth controller",
     });
@@ -40,7 +36,7 @@ export class AuthController {
           message: "Invalid email or password",
           user: user,
         });
-        throw new UnauthorizedException("Invalid email or password");
+        return Unauthorized("Invalid email or password");
       }
 
       this.logger.log({
@@ -49,13 +45,15 @@ export class AuthController {
       });
 
       // Send user data
-      return {
+      const userData = {
         user: user,
         tokens: {
           access_token: "fake-access-token",
           refresh_token: "fake-refresh-token",
         },
       };
+
+      return OK(userData);
     } catch (error) {
       this.logger.error({
         message: "Error loging user",
