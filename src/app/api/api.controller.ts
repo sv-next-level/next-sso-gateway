@@ -1,19 +1,19 @@
-import { LoginDTO, RegisterDTO } from "@/dtos";
-import { OK, Unauthorized } from "@/utils";
 import { Body, Controller, Logger, Post } from "@nestjs/common";
-import { AuthService } from "@/auth/auth.service";
 
-@Controller("auth")
-export class AuthController {
-  private logger: Logger = new Logger("auth.controller");
+import { OK, Unauthorized } from "@/utils";
+import { LoginDTO, RegisterDTO } from "@/dtos";
 
-  constructor(private readonly authService: AuthService) {
+@Controller("api")
+export class ApiController {
+  private logger: Logger = new Logger("api.controller");
+
+  constructor() {
     this.logger.debug({
-      message: "Entering constructor of auth controller",
+      message: "Entering constructor of api controller",
     });
   }
 
-  @Post("/login")
+  @Post("login")
   login(@Body() loginDto: LoginDTO): any {
     try {
       // dummy data
@@ -64,7 +64,7 @@ export class AuthController {
     }
   }
 
-  @Post("/register")
+  @Post("register")
   register(@Body() registerDto: RegisterDTO): any {
     try {
       this.logger.debug({

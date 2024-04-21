@@ -2,9 +2,12 @@ import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
 import { AppService } from "@/app.service";
-import { AuthModule } from "@/auth/auth.module";
 import { AppController } from "@/app.controller";
+import { ApiModule } from "@/app/api/api.module";
 import configuration, { validate } from "@/config";
+import { AuthModule } from "@/app/auth/auth.module";
+import { UserModule } from "@/app/user/user.module";
+import { RelayModule } from "@/app/relay/relay.module";
 import { DatabaseModule } from "@/infra/mongoose/database.module";
 
 @Module({
@@ -16,7 +19,10 @@ import { DatabaseModule } from "@/infra/mongoose/database.module";
       cache: true,
       validate,
     }),
+    ApiModule,
     AuthModule,
+    UserModule,
+    RelayModule,
     DatabaseModule,
   ],
   controllers: [AppController],
