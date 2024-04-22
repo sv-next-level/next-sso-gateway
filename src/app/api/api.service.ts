@@ -4,7 +4,7 @@ import { ForbiddenException, Injectable, Logger } from "@nestjs/common";
 
 @Injectable()
 export class ApiService {
-  private logger: Logger = new Logger("api.service");
+  private logger: Logger = new Logger(ApiService.name);
 
   constructor(private readonly httpService: HttpService) {
     this.logger.debug({
@@ -21,12 +21,30 @@ export class ApiService {
         })
       );
 
-    const fact = await lastValueFrom(request);
+    const res = await lastValueFrom(request);
 
     return {
-      data: {
-        fact,
-      },
+      ...res,
     };
+  }
+
+  async call(url: string, method: string, data?: any, headers?: any) {
+    const request = this.httpService
+      .request({
+        url: url,
+        method: method,
+        data: data,
+        headers: headers,
+      })
+      .pipe(map((res) => res.data))
+      .pipe(
+        catchError(() => {
+          throw new ForbiddenException("API not available").getResponse();
+        })
+      );
+
+    const res = await lastValueFrom(request);
+
+    return res;
   }
 }
