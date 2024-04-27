@@ -28,7 +28,7 @@ export class RelayService {
     this.url = this.configService.get<string>("RELAY_SERVICE_URL");
   }
 
-  async sendEmail(emailDto: SendEmailDTO): Promise<string> {
+  async sendEmail(emailDto: SendEmailDTO): Promise<any> {
     try {
       this.logger.debug({
         message: "Entering sendEmail",
@@ -36,11 +36,8 @@ export class RelayService {
 
       const url: string = `${this.url}/email/send`;
 
-      const relayId: string = await this.apiService.call(
-        url,
-        METHOD.POST,
-        emailDto
-      );
+      const { relay_id: relayId, expires_after: expiresAfter } =
+        await this.apiService.call(url, METHOD.POST, emailDto);
 
       if (!relayId) {
         this.logger.warn({
@@ -53,7 +50,7 @@ export class RelayService {
         ).getResponse();
       }
 
-      return relayId;
+      return { relay_id: relayId, expires_after: expiresAfter };
     } catch (error) {
       this.logger.error({
         message: "Error sending email",
@@ -61,6 +58,7 @@ export class RelayService {
         expires_after: emailDto.expires_after,
         error: error,
       });
+
       throw error;
     }
   }
@@ -72,7 +70,7 @@ export class RelayService {
 
       const url: string = `${this.url}/email/resend`;
 
-      const relayId: string = await this.apiService.call(
+      const { relay_id: relayId } = await this.apiService.call(
         url,
         METHOD.POST,
         emailDto
@@ -97,6 +95,7 @@ export class RelayService {
         expires_after: emailDto.expires_after,
         error: error,
       });
+
       throw error;
     }
   }
@@ -108,7 +107,7 @@ export class RelayService {
 
       const url: string = `${this.url}/email/verify`;
 
-      const verification: boolean = await this.apiService.call(
+      const { result: verification } = await this.apiService.call(
         url,
         METHOD.POST,
         emailDto
@@ -131,6 +130,7 @@ export class RelayService {
         relay_id: emailDto.relayId,
         error: error,
       });
+
       throw error;
     }
   }

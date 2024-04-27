@@ -7,10 +7,10 @@ import {
 } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
 
-import { PasswordDTO, UserDTO } from "@/dtos";
 import { ApiService } from "../api";
 import { METHOD } from "@/constants";
 import { InternalServerError } from "@/utils";
+import { PasswordDTO, UserDTO } from "@/dtos";
 
 @Injectable()
 export class UserService {
@@ -37,7 +37,7 @@ export class UserService {
 
       const url: string = `${this.url}/users/get`;
 
-      const userId: string = await this.apiService.call(
+      const { user_id: userId } = await this.apiService.call(
         url,
         METHOD.POST,
         userDto
@@ -60,6 +60,7 @@ export class UserService {
         portal: userDto.portal,
         error: error,
       });
+
       throw error;
     }
   }
@@ -72,7 +73,7 @@ export class UserService {
 
       const url: string = `${this.url}/users/set`;
 
-      const userId: string = await this.apiService.call(
+      const { user_id: userId } = await this.apiService.call(
         url,
         METHOD.POST,
         userDto
@@ -95,6 +96,7 @@ export class UserService {
         portal: userDto.portal,
         error: error,
       });
+
       throw error;
     }
   }
@@ -108,7 +110,7 @@ export class UserService {
 
       const url: string = `${this.url}/passwords/validate`;
 
-      const isValid: boolean = await this.apiService.call(
+      const { result: isValid } = await this.apiService.call(
         url,
         METHOD.POST,
         passwordDto
@@ -116,10 +118,10 @@ export class UserService {
 
       if (typeof isValid !== Boolean.name.toLowerCase()) {
         this.logger.warn({
-          message: "Failed to get velidate password",
+          message: "Failed to get validate password",
           user_id: passwordDto.userId,
         });
-        throw InternalServerError("Failed to velidate user password");
+        throw InternalServerError("Failed to validate user password");
       }
 
       return isValid;
@@ -129,20 +131,21 @@ export class UserService {
         user_id: passwordDto.userId,
         error: error,
       });
+
       throw error;
     }
   }
 
-  async setPassword(passwordDto: PasswordDTO): Promise<string> {
+  async createPassword(passwordDto: PasswordDTO): Promise<string> {
     try {
       this.logger.debug({
-        message: "Entering setPassword",
+        message: "Entering createPassword",
         user_id: passwordDto.userId,
       });
 
-      const url: string = `${this.url}/passwords/set`;
+      const url: string = `${this.url}/passwords/create`;
 
-      const passwordId: string = await this.apiService.call(
+      const { password_id: passwordId } = await this.apiService.call(
         url,
         METHOD.POST,
         passwordDto
@@ -150,21 +153,22 @@ export class UserService {
 
       if (!passwordId) {
         this.logger.warn({
-          message: "Failed to set password",
+          message: "Failed to create password",
           user_id: passwordDto.userId,
         });
         throw new InternalServerErrorException(
-          "Failed to set password"
+          "Failed to create password"
         ).getResponse();
       }
 
       return passwordId;
     } catch (error) {
       this.logger.error({
-        message: "Error setting password",
+        message: "Error creating password",
         user_id: passwordDto.userId,
         error: error,
       });
+
       throw error;
     }
   }

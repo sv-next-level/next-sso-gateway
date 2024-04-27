@@ -19,11 +19,11 @@ import {
   VerifyEmailDTO,
 } from "@/dtos";
 import { ApiService } from ".";
-import { OK, Unauthorized } from "@/utils";
 import { AuthService } from "../auth/auth.service";
 import { UserService } from "../user/user.service";
 import { RelayService } from "../relay/relay.service";
 import { EMAIL_TYPE, SERVICE_TYPE } from "@/constants";
+import { InternalServerError, OK, Unauthorized } from "@/utils";
 
 @Controller("api")
 export class ApiController {
@@ -71,7 +71,7 @@ export class ApiController {
           message: "Invalid emaail or password",
           user_id: passwordDto.userId,
         });
-        return Unauthorized("Invalid emaail or password");
+        return Unauthorized("Invalid email or password");
       }
 
       this.logger.log({
@@ -93,7 +93,7 @@ export class ApiController {
         error: error,
       });
 
-      return error;
+      return InternalServerError(error);
     }
   }
 
@@ -118,7 +118,7 @@ export class ApiController {
       };
 
       const passwordId: string =
-        await this.userService.setPassword(passwordDto);
+        await this.userService.createPassword(passwordDto);
 
       this.logger.log({
         message: "user registered successfully",
@@ -140,7 +140,7 @@ export class ApiController {
         error: error,
       });
 
-      return error;
+      return InternalServerError(error);
     }
   }
 
@@ -167,20 +167,22 @@ export class ApiController {
         requesting_service_type: SERVICE_TYPE.AUTH,
       };
 
-      const relayId: string = await this.relayService.sendEmail(otpDto);
+      const sendedEmailData = await this.relayService.sendEmail(otpDto);
 
       this.logger.log({
         message: "OTP send successfully",
-        relay_id: relayId,
+        relay_id: sendedEmailData.relay_id,
+        expires_after: sendedEmailData.expires_after,
         user_id: userId,
         email_type: otpDto.email_type,
-        expires_after: otpDto.expires_after,
+        expires_after_seconds: otpDto.expires_after,
       });
 
       const data = {
-        relayId: relayId,
         userId: userId,
-        expiresAfter: otpDto.expires_after,
+        email_type: otpDto.email_type,
+        relay_id: sendedEmailData.relay_id,
+        expires_after: sendedEmailData.expires_after,
       };
 
       return OK(data);
@@ -190,7 +192,7 @@ export class ApiController {
         error: error,
       });
 
-      return error;
+      return InternalServerError(error);
     }
   }
   @Post("create")
@@ -202,7 +204,7 @@ export class ApiController {
       });
 
       const passwordId: string =
-        await this.userService.setPassword(passwordDto);
+        await this.userService.createPassword(passwordDto);
 
       this.logger.log({
         message: "user password created successfully",
@@ -222,7 +224,7 @@ export class ApiController {
         error: error,
       });
 
-      return error;
+      return InternalServerError(error);
     }
   }
 
@@ -256,7 +258,7 @@ export class ApiController {
         error: error,
       });
 
-      return error;
+      return InternalServerError(error);
     }
   }
 
@@ -269,19 +271,20 @@ export class ApiController {
         expires_after: otpDto.expires_after,
       });
 
-      const relayId: string = await this.relayService.sendEmail(otpDto);
+      const sendedEmailData = await this.relayService.sendEmail(otpDto);
 
       this.logger.log({
         message: "OTP send successfully",
-        relay_id: relayId,
+        relay_id: sendedEmailData.relay_id,
+        expires_after: sendedEmailData.expires_after,
         email_type: otpDto.email_type,
-        expires_after: otpDto.expires_after,
+        expires_after_seconds: otpDto.expires_after,
       });
 
       const data = {
-        relayId: relayId,
-        emailType: otpDto.email_type,
-        expiresAfter: otpDto.expires_after,
+        email_type: otpDto.email_type,
+        relay_id: sendedEmailData.relay_id,
+        expires_after: sendedEmailData.expires_after,
       };
 
       return OK(data);
@@ -293,7 +296,7 @@ export class ApiController {
         error: error,
       });
 
-      return error;
+      return InternalServerError(error);
     }
   }
 
@@ -328,7 +331,7 @@ export class ApiController {
         error: error,
       });
 
-      return error;
+      return InternalServerError(error);
     }
   }
 
@@ -361,7 +364,7 @@ export class ApiController {
         error: error,
       });
 
-      return error;
+      return InternalServerError(error);
     }
   }
 }

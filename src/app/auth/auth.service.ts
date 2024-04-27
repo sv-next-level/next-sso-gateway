@@ -36,11 +36,7 @@ export class AuthService {
 
       const url: string = `${this.url}/tokens/create`;
 
-      const token: string = await this.apiService.call(
-        url,
-        METHOD.POST,
-        tokenDto
-      );
+      const { token } = await this.apiService.call(url, METHOD.POST, tokenDto);
 
       if (!token) {
         this.logger.warn({
@@ -61,6 +57,7 @@ export class AuthService {
         portal: tokenDto.portal,
         error: error,
       });
+
       throw error;
     }
   }

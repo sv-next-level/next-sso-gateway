@@ -11,40 +11,57 @@ export class ApiService {
       message: "Entering constructor of api service",
     });
   }
-  async getCatFacts() {
-    const request = this.httpService
-      .get("https://catfact.ninja/fact")
-      .pipe(map((res) => res.data?.fact))
-      .pipe(
-        catchError(() => {
-          throw new ForbiddenException("API not available");
-        })
-      );
-
-    const res = await lastValueFrom(request);
-
-    return {
-      ...res,
-    };
-  }
 
   async call(url: string, method: string, data?: any, headers?: any) {
-    const request = this.httpService
-      .request({
+    try {
+      this.logger.debug({
+        message: "Entering call of api service",
         url: url,
-        method: method,
         data: data,
+        method: method,
         headers: headers,
-      })
-      .pipe(map((res) => res.data))
-      .pipe(
-        catchError(() => {
-          throw new ForbiddenException("API not available").getResponse();
+      });
+
+      const request = this.httpService
+        .request({
+          url: url,
+          method: method,
+          data: data,
+          headers: headers,
         })
-      );
+        .pipe(map((res) => res.data))
+        .pipe(
+          catchError(() => {
+            throw new ForbiddenException("API not available").getResponse();
+          })
+        );
 
-    const res = await lastValueFrom(request);
+      const res = await lastValueFrom(request);
 
-    return res;
+      this.logger.log({
+        message: "Api call response",
+        res: res,
+        url: url,
+        data: data,
+        method: method,
+        headers: headers,
+      });
+
+      if (res.error) {
+        throw res.error;
+      }
+
+      return res.data;
+    } catch (error) {
+      this.logger.error({
+        message: "Error calling api",
+        error: error,
+        url: url,
+        data: data,
+        method: method,
+        headers: headers,
+      });
+      throw error;
+    }
   }
 }
