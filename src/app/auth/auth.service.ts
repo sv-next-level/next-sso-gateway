@@ -1,15 +1,10 @@
-import {
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  forwardRef,
-} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { Inject, Injectable, Logger, forwardRef } from "@nestjs/common";
 
 import { ApiService } from "../api";
 import { METHOD } from "@/constants";
 import { CreateTokenDTO } from "@/dtos";
+import { InternalServerError } from "@/utils";
 
 @Injectable()
 export class AuthService {
@@ -44,9 +39,7 @@ export class AuthService {
           user_id: tokenDto.userId,
           portal: tokenDto.portal,
         });
-        throw new InternalServerErrorException(
-          "Failed create new token"
-        ).getResponse();
+        throw InternalServerError("Failed create new token");
       }
 
       return token;

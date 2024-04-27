@@ -68,10 +68,10 @@ export class ApiController {
 
       if (!isValid) {
         this.logger.warn({
-          message: "Invalid emaail or password",
+          message: "Invalid email or password",
           user_id: passwordDto.userId,
         });
-        return Unauthorized("Invalid email or password");
+        throw Unauthorized("Invalid email or password");
       }
 
       this.logger.log({

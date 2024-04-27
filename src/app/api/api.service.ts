@@ -1,6 +1,8 @@
 import { HttpService } from "@nestjs/axios";
+import { Injectable, Logger } from "@nestjs/common";
 import { catchError, lastValueFrom, map } from "rxjs";
-import { ForbiddenException, Injectable, Logger } from "@nestjs/common";
+
+import { Unauthorized } from "@/utils";
 
 @Injectable()
 export class ApiService {
@@ -32,7 +34,7 @@ export class ApiService {
         .pipe(map((res) => res.data))
         .pipe(
           catchError(() => {
-            throw new ForbiddenException("API not available").getResponse();
+            throw Unauthorized("API not available");
           })
         );
 

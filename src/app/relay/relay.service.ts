@@ -1,14 +1,9 @@
-import {
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  forwardRef,
-} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { Inject, Injectable, Logger, forwardRef } from "@nestjs/common";
 
 import { ApiService } from "../api";
 import { METHOD } from "@/constants";
+import { InternalServerError } from "@/utils";
 import { ResendEmailDTO, SendEmailDTO, VerifyEmailDTO } from "@/dtos";
 
 @Injectable()
@@ -45,9 +40,7 @@ export class RelayService {
           email_type: emailDto.email_type,
           expires_after: emailDto.expires_after,
         });
-        throw new InternalServerErrorException(
-          "Failed to send email"
-        ).getResponse();
+        throw InternalServerError("Failed to send email");
       }
 
       return { relay_id: relayId, expires_after: expiresAfter };
@@ -82,9 +75,7 @@ export class RelayService {
           relay_id: emailDto.relayId,
           expires_after: emailDto.expires_after,
         });
-        throw new InternalServerErrorException(
-          "Failed to resend email"
-        ).getResponse();
+        throw InternalServerError("Failed to resend email");
       }
 
       return relayId;
@@ -118,9 +109,7 @@ export class RelayService {
           message: "Failed to verify email",
           relay_id: emailDto.relayId,
         });
-        throw new InternalServerErrorException(
-          "Failed to verify email"
-        ).getResponse();
+        throw InternalServerError("Failed to verify email");
       }
 
       return verification;

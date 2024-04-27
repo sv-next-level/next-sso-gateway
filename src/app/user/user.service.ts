@@ -1,11 +1,5 @@
-import {
-  Inject,
-  Injectable,
-  InternalServerErrorException,
-  Logger,
-  forwardRef,
-} from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
+import { Inject, Injectable, Logger, forwardRef } from "@nestjs/common";
 
 import { ApiService } from "../api";
 import { METHOD } from "@/constants";
@@ -48,9 +42,7 @@ export class UserService {
           message: "Failed to get user id",
           portal: userDto.portal,
         });
-        throw new InternalServerErrorException(
-          "Failed to get user id"
-        ).getResponse();
+        throw InternalServerError("Failed to get user id");
       }
 
       return userId;
@@ -84,9 +76,7 @@ export class UserService {
           message: "Failed to set user id",
           portal: userDto.portal,
         });
-        throw new InternalServerErrorException(
-          "Failed to set user id"
-        ).getResponse();
+        throw InternalServerError("Failed to set user id");
       }
 
       return userId;
@@ -156,9 +146,7 @@ export class UserService {
           message: "Failed to create password",
           user_id: passwordDto.userId,
         });
-        throw new InternalServerErrorException(
-          "Failed to create password"
-        ).getResponse();
+        throw InternalServerError("Failed to create password");
       }
 
       return passwordId;
