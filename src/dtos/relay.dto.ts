@@ -1,13 +1,44 @@
 import {
+  IsEmail,
   IsEnum,
   IsMongoId,
   IsNotEmpty,
   IsNumber,
   IsOptional,
   IsString,
+  ValidationArguments,
 } from "class-validator";
 
-import { EMAIL_TYPE, SERVICE_TYPE } from "@/constants";
+import {
+  EMAIL_BLACKLISTED_CHARS,
+  EMAIL_TYPE,
+  PORTAL,
+  SERVICE_TYPE,
+} from "@/constants";
+import { getEmailErrorMessage } from "@/dtos/functions";
+
+export class SendEmailOTPDTO {
+  @IsEmail(
+    {
+      blacklisted_chars: EMAIL_BLACKLISTED_CHARS,
+    },
+    {
+      message(validationArguments: ValidationArguments) {
+        const error: string = getEmailErrorMessage(validationArguments);
+        return error;
+      },
+    }
+  )
+  readonly email: string;
+
+  @IsEnum(PORTAL, { message: "Invalid portal type" })
+  readonly portal: PORTAL;
+}
+
+export class ResendEmailOTPDTO {
+  @IsMongoId()
+  readonly relayId: string;
+}
 
 export class SendEmailDTO {
   @IsString()

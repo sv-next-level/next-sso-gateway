@@ -9,12 +9,13 @@ import {
 
 import {
   CreateTokenDTO,
-  ForgotDTO,
   LoginDTO,
   PasswordDTO,
   RegisterDTO,
   ResendEmailDTO,
+  ResendEmailOTPDTO,
   SendEmailDTO,
+  SendEmailOTPDTO,
   UserDTO,
   VerifyEmailDTO,
 } from "@/dtos";
@@ -145,7 +146,7 @@ export class ApiController {
   }
 
   @Post("forgot")
-  async forgot(@Body() forgotDto: ForgotDTO): Promise<any> {
+  async forgot(@Body() forgotDto: SendEmailOTPDTO): Promise<any> {
     try {
       this.logger.debug({
         message: "Entering forgot",
@@ -263,13 +264,20 @@ export class ApiController {
   }
 
   @Post("otp/send")
-  async sendOTP(@Body() otpDto: SendEmailDTO): Promise<any> {
+  async sendOTP(@Body() sendEmailDto: SendEmailOTPDTO): Promise<any> {
     try {
       this.logger.debug({
         message: "Entering sendOTP",
-        email_type: otpDto.email_type,
-        expires_after: otpDto.expires_after,
+        data: sendEmailDto,
       });
+
+      const otpDto: SendEmailDTO = {
+        to: sendEmailDto.email,
+        data: "123456",
+        expires_after: 60,
+        email_type: EMAIL_TYPE.OTP_2FA,
+        requesting_service_type: SERVICE_TYPE.AUTH,
+      };
 
       const sendedEmailData = await this.relayService.sendEmail(otpDto);
 
@@ -291,8 +299,6 @@ export class ApiController {
     } catch (error) {
       this.logger.error({
         message: "Error sending otp",
-        expires_after: otpDto.expires_after,
-        email_type: otpDto.email_type,
         error: error,
       });
 
@@ -301,33 +307,39 @@ export class ApiController {
   }
 
   @Post("otp/resend")
-  async resendOTP(@Body() otpDto: ResendEmailDTO): Promise<any> {
+  async resendOTP(@Body() resendEmailDto: ResendEmailOTPDTO): Promise<any> {
     try {
       this.logger.debug({
         message: "Entering resendOTP",
-        relay_id: otpDto.relayId,
-        expires_after: otpDto.expires_after,
+        relay_id: resendEmailDto.relayId,
       });
 
-      const relayId: string = await this.relayService.resendEmail(otpDto);
+      const otpDto: ResendEmailDTO = {
+        relayId: resendEmailDto.relayId,
+        data: "123456",
+        expires_after: 60,
+      };
+
+      const resendedEmailData = await this.relayService.resendEmail(otpDto);
 
       this.logger.log({
         message: "OTP resend successfully",
-        new_relay_id: relayId,
         old_relay_id: otpDto.relayId,
-        expires_after: otpDto.expires_after,
+        new_relay_id: resendedEmailData.relay_id,
+        expires_after: resendedEmailData.expires_after,
+        expires_after_seconds: otpDto.expires_after,
       });
 
       const data = {
-        relayId: relayId,
-        expiresAfter: otpDto.expires_after,
+        relay_id: resendedEmailData.relay_id,
+        expires_after: resendedEmailData.expires_after,
       };
 
       return OK(data);
     } catch (error) {
       this.logger.error({
         message: "Error resending otp",
-        relay_id: otpDto.relayId,
+        relay_id: resendEmailDto.relayId,
         error: error,
       });
 

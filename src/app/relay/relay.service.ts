@@ -55,7 +55,7 @@ export class RelayService {
       throw error;
     }
   }
-  async resendEmail(emailDto: ResendEmailDTO): Promise<string> {
+  async resendEmail(emailDto: ResendEmailDTO): Promise<any> {
     try {
       this.logger.debug({
         message: "Entering resendEmail",
@@ -63,11 +63,8 @@ export class RelayService {
 
       const url: string = `${this.url}/email/resend`;
 
-      const { relay_id: relayId } = await this.apiService.call(
-        url,
-        METHOD.POST,
-        emailDto
-      );
+      const { relay_id: relayId, expires_after: expiresAfter } =
+        await this.apiService.call(url, METHOD.POST, emailDto);
 
       if (!relayId) {
         this.logger.warn({
@@ -78,7 +75,7 @@ export class RelayService {
         throw InternalServerError("Failed to resend email");
       }
 
-      return relayId;
+      return { relay_id: relayId, expires_after: expiresAfter };
     } catch (error) {
       this.logger.error({
         message: "Error resending email",
