@@ -11,7 +11,6 @@ import {
   CreateTokenDTO,
   LoginDTO,
   PasswordDTO,
-  RegisterDTO,
   ResendEmailDTO,
   ResendEmailOTPDTO,
   SendEmailDTO,
@@ -64,10 +63,10 @@ export class ApiController {
         password: loginDto.password,
       };
 
-      const isValid: boolean =
+      const verification: boolean =
         await this.userService.validatePassword(passwordDto);
 
-      if (!isValid) {
+      if (!verification) {
         this.logger.warn({
           message: "Invalid email or password",
           user_id: passwordDto.userId,
@@ -84,7 +83,7 @@ export class ApiController {
       const data = {
         userId: userId,
         portal: loginDto.portal,
-        passwordValidation: isValid,
+        verification: verification,
       };
 
       return OK(data);
@@ -99,39 +98,24 @@ export class ApiController {
   }
 
   @Post("register")
-  async register(@Body() registerDto: RegisterDTO): Promise<any> {
+  async register(@Body() userDto: any): Promise<any> {
     try {
       this.logger.debug({
         message: "Entering register",
-        data: registerDto,
+        data: userDto,
       });
 
-      const userDto: UserDTO = {
-        email: registerDto.email,
-        portal: registerDto.portal,
-      };
-
       const userId: string = await this.userService.setUser(userDto);
-
-      const passwordDto: PasswordDTO = {
-        userId: userId,
-        password: registerDto.password,
-      };
-
-      const passwordId: string =
-        await this.userService.createPassword(passwordDto);
 
       this.logger.log({
         message: "user registered successfully",
         user_id: userId,
-        password_id: passwordId,
-        portal: registerDto.portal,
+        portal: userDto.portal,
       });
 
       const data = {
         userId: userId,
-        passwordId: passwordId,
-        portal: registerDto.portal,
+        portal: userDto.portal,
       };
 
       return OK(data);
@@ -146,44 +130,24 @@ export class ApiController {
   }
 
   @Post("forgot")
-  async forgot(@Body() forgotDto: SendEmailOTPDTO): Promise<any> {
+  async forgot(@Body() userDto: UserDTO): Promise<any> {
     try {
       this.logger.debug({
         message: "Entering forgot",
-        data: forgotDto,
+        data: userDto,
       });
-
-      const userDto: UserDTO = {
-        email: forgotDto.email,
-        portal: forgotDto.portal,
-      };
 
       const userId: string = await this.userService.getUserId(userDto);
 
-      const otpDto: SendEmailDTO = {
-        to: forgotDto.email,
-        data: "123456",
-        expires_after: 60,
-        email_type: EMAIL_TYPE.OTP_2FA,
-        requesting_service_type: SERVICE_TYPE.AUTH,
-      };
-
-      const sendedEmailData = await this.relayService.sendEmail(otpDto);
-
       this.logger.log({
-        message: "OTP send successfully",
-        relay_id: sendedEmailData.relay_id,
-        expires_after: sendedEmailData.expires_after,
+        message: "user forgot successfully",
         user_id: userId,
-        email_type: otpDto.email_type,
-        expires_after_seconds: otpDto.expires_after,
+        portal: userDto.portal,
       });
 
       const data = {
         userId: userId,
-        email_type: otpDto.email_type,
-        relay_id: sendedEmailData.relay_id,
-        expires_after: sendedEmailData.expires_after,
+        portal: userDto.portal,
       };
 
       return OK(data);
