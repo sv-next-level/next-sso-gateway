@@ -1,19 +1,21 @@
 {
-  "name": "next-auth-gateway",
+  "name": "next-access-gateway",
   "version": "0.0.1",
   "description": "",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
+    "cm": "cz",
     "dev": "clear && nest start --watch",
     "build": "nest build",
     "start": "nest start",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
-    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lint": "eslint \"{src,apps,libs,test}/**/*.ts\"",
+    "lint:fix": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
+    "lints": "lint-staged",
     "test": "jest",
-    "format": "npm run prettier -- --write",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
@@ -21,7 +23,11 @@
     "check-formats": "npm run prettier -- --list-different",
     "clean": "rm -rf node_modules coverage dist .nyc_output && npm cache clean --force",
     "validate": "yarn check-formats && yarn lint && yarn build",
-    "prettier": "prettier --ignore-path .gitignore \"**/*.+(js|json|ts)\""
+    "format": "npm run prettier -- --write",
+    "prettier": "prettier --ignore-path .gitignore .",
+    "submodule": "git submodule update --init --remote",
+    "prepare": "npm run submodule && husky install",
+    "release:local": "npx semantic-release --dry-run=false"
   },
   "dependencies": {
     "@nestjs/axios": "^3.0.2",
@@ -34,6 +40,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "mongoose": "^8.3.2",
+    "next-util-nestjs": "file:src/shared/nestjs",
     "reflect-metadata": "^0.2.0",
     "rxjs": "^7.8.1"
   },

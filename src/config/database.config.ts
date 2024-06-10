@@ -2,13 +2,13 @@ import { registerAs } from "@nestjs/config";
 
 import { DATABASE_CONNECTION_NAME, ENVIRONMENT } from "@/constants";
 
-export const AUTH_GATEWAY_DB_CONFIG = registerAs(
-  DATABASE_CONNECTION_NAME.AUTH_GATEWAY_DB,
+export const ACCESS_GATEWAY_DB_CONFIG = registerAs(
+  DATABASE_CONNECTION_NAME.ACCESS_GATEWAY_DB,
   () => {
     return {
-      MONGODB_URI: process.env["AUTH_GATEWAY_MONGODB_URI"],
-      DATABASE_NAME: process.env["AUTH_GATEWAY_DATABASE_NAME"],
-      MONGODB_CONFIG: process.env["AUTH_GATEWAY_MONGODB_CONFIG"],
+      MONGODB_URI: process.env["ACCESS_GATEWAY_MONGODB_URI"],
+      DATABASE_NAME: process.env["ACCESS_GATEWAY_DATABASE_NAME"],
+      MONGODB_CONFIG: process.env["ACCESS_GATEWAY_MONGODB_CONFIG"],
       MONGODB_LOCAL_URI: "mongodb://localhost:27017",
 
       isLocal() {

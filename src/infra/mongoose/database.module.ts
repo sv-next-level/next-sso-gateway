@@ -9,7 +9,7 @@ import { DATABASE_CONNECTION_NAME } from "@/constants";
     // Database `APP` connection factory provider
     MongooseModule.forRootAsync({
       useClass: MongooseAuthGatewayConfigService,
-      connectionName: DATABASE_CONNECTION_NAME.AUTH_GATEWAY_DB,
+      connectionName: DATABASE_CONNECTION_NAME.ACCESS_GATEWAY_DB,
     }),
 
     // Database `ADMIN` connection factory provider

@@ -20,7 +20,7 @@ export class AuthService {
       message: "Entering constructor of auth service",
     });
 
-    this.url = this.configService.get<string>("AUTH_SERVICE_URL");
+    this.url = this.configService.get<string>("ACCESS_SERVICE_URL");
   }
 
   async createToken(tokenDto: CreateTokenDTO) {

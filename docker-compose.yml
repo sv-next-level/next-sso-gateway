@@ -1,9 +1,9 @@
-version: '3.9'
+version: "3.9"
 
 services:
-  auth-gateway-dev:
-    container_name: auth-gateway-develop
-    image: auth-gateway-dev:1.0.0
+  access-gateway-dev:
+    container_name: access-gateway-develop
+    image: access-gateway-dev:1.0.0
     build: .
     ports:
       - 4000:4000

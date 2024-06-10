@@ -17,7 +17,7 @@ export class MongooseAuthGatewayConfigService
     | MongooseModuleOptions
     | Promise<MongooseModuleOptions> {
     const uri = this.configService.get(
-      `${DATABASE_CONNECTION_NAME.AUTH_GATEWAY_DB}.dbUri`
+      `${DATABASE_CONNECTION_NAME.ACCESS_GATEWAY_DB}.dbUri`
     );
 
     return {
