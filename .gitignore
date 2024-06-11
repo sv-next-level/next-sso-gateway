@@ -135,5 +135,6 @@ dist
 .eslintignore
 .eslintrc
 .lintstagedrc
+.prettierignore
 .prettierrc
 .releaserc
