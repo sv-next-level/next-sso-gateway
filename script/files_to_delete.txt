@@ -1,0 +1,7 @@
+.husky
+.czrc
+.eslintignore
+.eslintrc
+.lintstagedrc
+.prettierrc
+.releaserc

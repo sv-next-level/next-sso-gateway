@@ -1,0 +1,7 @@
+./src/shared/nestjs/.husky
+./src/shared/nestjs/.czrc
+./src/shared/nestjs/.eslintignore
+./src/shared/nestjs/.eslintrc
+./src/shared/nestjs/.lintstagedrc
+./src/shared/nestjs/.prettierrc
+./src/shared/nestjs/.releaserc

@@ -21,12 +21,14 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
     "check-formats": "npm run prettier -- --list-different",
-    "clean": "rm -rf node_modules coverage dist .nyc_output && npm cache clean --force",
+    "clean": "rm -rf node_modules coverage dist .nyc_output && npm cache clean --force && npm run delete",
     "validate": "yarn check-formats && yarn lint && yarn build",
     "format": "npm run prettier -- --write",
     "prettier": "prettier --ignore-path .gitignore .",
     "submodule": "git submodule update --init --remote",
-    "prepare": "npm run submodule && husky install",
+    "copy": "chmod +x ./script/copy.sh && ./script/copy.sh",
+    "delete": "chmod +x ./script/delete.sh && ./script/delete.sh",
+    "prepare": "npm run submodule && npm run copy && husky install",
     "release:local": "npx semantic-release --dry-run=false"
   },
   "dependencies": {
