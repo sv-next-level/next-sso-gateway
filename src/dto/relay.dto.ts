@@ -9,13 +9,11 @@ import {
   ValidationArguments,
 } from "class-validator";
 
-import {
-  EMAIL_BLACKLISTED_CHARS,
-  EMAIL_TYPE,
-  PORTAL,
-  SERVICE_TYPE,
-} from "@/constants";
-import { getEmailErrorMessage } from "@/dtos/functions";
+import { EMAIL_TYPE } from "@/constant";
+import { EMAIL as EMAIL_BLACKLISTED_CHARS } from "@/common/util/blacklist";
+import { PORTAL } from "@/common/server/portal";
+import { getEmailErrorMessage } from "@/dto/functions";
+import { SERVICE } from "@/common/server/service";
 
 export class SendEmailOTPDTO {
   @IsEmail(
@@ -60,8 +58,8 @@ export class SendEmailDTO {
 
   @IsNotEmpty()
   @IsString()
-  @IsEnum(SERVICE_TYPE, { message: "Invalid service request!" })
-  readonly requesting_service_type: SERVICE_TYPE;
+  @IsEnum(SERVICE, { message: "Invalid service request!" })
+  readonly requesting_service_type: SERVICE;
 }
 
 export class VerifyEmailDTO {

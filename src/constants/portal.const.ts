@@ -1,4 +1,0 @@
-export enum PORTAL {
-  TRADING = "TRADING",
-  DASHBOARD = "DASHBOARD",
-}

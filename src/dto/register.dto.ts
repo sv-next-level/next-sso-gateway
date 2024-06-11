@@ -1,4 +1,5 @@
-import { EMAIL_BLACKLISTED_CHARS, PORTAL } from "@/constants";
+import { EMAIL as EMAIL_BLACKLISTED_CHARS } from "@/common/util/blacklist";
+import { PORTAL } from "@/common/server/portal";
 
 import {
   IsEmail,
@@ -7,9 +8,9 @@ import {
   Length,
   ValidationArguments,
 } from "class-validator";
-import { getEmailErrorMessage } from "@/dtos/functions";
+import { getEmailErrorMessage } from "@/dto/functions";
 
-export class LoginDTO {
+export class RegisterDTO {
   @IsEmail(
     {
       blacklisted_chars: EMAIL_BLACKLISTED_CHARS,

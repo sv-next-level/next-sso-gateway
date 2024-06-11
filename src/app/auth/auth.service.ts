@@ -2,8 +2,8 @@ import { ConfigService } from "@nestjs/config";
 import { Inject, Injectable, Logger, forwardRef } from "@nestjs/common";
 
 import { ApiService } from "../api";
-import { METHOD } from "@/constants";
-import { CreateTokenDTO } from "@/dtos";
+import { CreateTokenDTO } from "@/dto";
+import { METHOD } from "@/common/api/method";
 import { InternalServerError } from "@/utils";
 
 @Injectable()

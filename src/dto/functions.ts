@@ -1,7 +1,5 @@
-import {
-  EMAIL_BLACKLISTED_CHARS,
-  emailBlacklistedCharsRegex,
-} from "@/constants";
+import { EMAIL as EMAIL_BLACKLISTED_CHARS } from "@/common/util/blacklist";
+import { emailBlacklistedChars } from "@/common/util/regex";
 import { ValidationArguments } from "class-validator";
 
 export const getEmailErrorMessage = (
@@ -10,7 +8,7 @@ export const getEmailErrorMessage = (
   const email: string = validationArguments.value;
   const blacklisted_chars_array: string[] = EMAIL_BLACKLISTED_CHARS.split("");
 
-  const is_blacklisted_chars_exists = emailBlacklistedCharsRegex.test(email);
+  const is_blacklisted_chars_exists = emailBlacklistedChars.test(email);
   if (is_blacklisted_chars_exists) {
     return `Email with ${blacklisted_chars_array} char are not allowed`;
   } else {

@@ -17,12 +17,13 @@ import {
   SendEmailOTPDTO,
   UserDTO,
   VerifyEmailDTO,
-} from "@/dtos";
+} from "@/dto";
 import { ApiService } from ".";
 import { AuthService } from "../auth/auth.service";
 import { UserService } from "../user/user.service";
 import { RelayService } from "../relay/relay.service";
-import { EMAIL_TYPE, SERVICE_TYPE } from "@/constants";
+import { EMAIL_TYPE } from "@/constant";
+import { SERVICE } from "@/common/server/service";
 import { InternalServerError, OK, Unauthorized } from "@/utils";
 
 @Controller("api")
@@ -240,7 +241,7 @@ export class ApiController {
         data: "123456",
         expires_after: 60,
         email_type: EMAIL_TYPE.OTP_2FA,
-        requesting_service_type: SERVICE_TYPE.AUTH,
+        requesting_service_type: SERVICE.ACCESS_GATEWAY,
       };
 
       const sendedEmailData = await this.relayService.sendEmail(otpDto);
