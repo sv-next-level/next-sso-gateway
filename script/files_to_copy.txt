@@ -3,5 +3,6 @@
 ./src/shared/nestjs/.eslintignore
 ./src/shared/nestjs/.eslintrc
 ./src/shared/nestjs/.lintstagedrc
+./src/shared/nestjs/.prettierignore
 ./src/shared/nestjs/.prettierrc
 ./src/shared/nestjs/.releaserc
