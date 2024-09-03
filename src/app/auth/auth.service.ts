@@ -1,10 +1,13 @@
+import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { Inject, Injectable, Logger, forwardRef } from "@nestjs/common";
+
+import { CreateTokenDTO } from "@/dto";
+
+import { METHOD } from "@/common/api/method";
+
+import { InternalServerError } from "@/utils";
 
 import { ApiService } from "../api";
-import { CreateTokenDTO } from "@/dto";
-import { METHOD } from "@/common/api/method";
-import { InternalServerError } from "@/utils";
 
 @Injectable()
 export class AuthService {
@@ -14,7 +17,7 @@ export class AuthService {
   constructor(
     @Inject(forwardRef(() => ApiService))
     private readonly apiService: ApiService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {
     this.logger.debug({
       message: "Entering constructor of auth service",

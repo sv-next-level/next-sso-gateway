@@ -1,10 +1,10 @@
 import {
   Body,
   Controller,
+  forwardRef,
   Inject,
   Logger,
   Post,
-  forwardRef,
 } from "@nestjs/common";
 
 import {
@@ -18,13 +18,16 @@ import {
   UserDTO,
   VerifyEmailDTO,
 } from "@/dto";
+
+import { SERVICE } from "@/common/server/service";
+
+import { EMAIL_TYPE } from "@/constant";
+import { InternalServerError, OK, Unauthorized } from "@/utils";
+
 import { ApiService } from ".";
 import { AuthService } from "../auth/auth.service";
-import { UserService } from "../user/user.service";
 import { RelayService } from "../relay/relay.service";
-import { EMAIL_TYPE } from "@/constant";
-import { SERVICE } from "@/common/server/service";
-import { InternalServerError, OK, Unauthorized } from "@/utils";
+import { UserService } from "../user/user.service";
 
 @Controller("api")
 export class ApiController {
@@ -37,7 +40,7 @@ export class ApiController {
     @Inject(forwardRef(() => RelayService))
     private readonly relayService: RelayService,
     @Inject(forwardRef(() => UserService))
-    private readonly userService: UserService
+    private readonly userService: UserService,
   ) {
     this.logger.debug({
       message: "Entering constructor of api controller",

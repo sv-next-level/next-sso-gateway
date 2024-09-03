@@ -1,6 +1,7 @@
+import { catchError, lastValueFrom, map } from "rxjs";
+
 import { HttpService } from "@nestjs/axios";
 import { Injectable, Logger } from "@nestjs/common";
-import { catchError, lastValueFrom, map } from "rxjs";
 
 import { Unauthorized } from "@/utils";
 
@@ -35,7 +36,7 @@ export class ApiService {
         .pipe(
           catchError(() => {
             throw Unauthorized("API not available");
-          })
+          }),
         );
 
       const res = await lastValueFrom(request);

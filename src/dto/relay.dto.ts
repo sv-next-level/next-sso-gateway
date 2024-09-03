@@ -9,11 +9,13 @@ import {
   ValidationArguments,
 } from "class-validator";
 
-import { EMAIL_TYPE } from "@/constant";
-import { EMAIL as EMAIL_BLACKLISTED_CHARS } from "@/common/util/blacklist";
-import { PORTAL } from "@/common/server/portal";
 import { getEmailErrorMessage } from "@/dto/functions";
+
+import { PORTAL } from "@/common/server/portal";
 import { SERVICE } from "@/common/server/service";
+import { EMAIL as EMAIL_BLACKLISTED_CHARS } from "@/common/util/blacklist";
+
+import { EMAIL_TYPE } from "@/constant";
 
 export class SendEmailOTPDTO {
   @IsEmail(
@@ -25,7 +27,7 @@ export class SendEmailOTPDTO {
         const error: string = getEmailErrorMessage(validationArguments);
         return error;
       },
-    }
+    },
   )
   readonly email: string;
 

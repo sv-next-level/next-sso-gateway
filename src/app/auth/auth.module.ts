@@ -1,4 +1,4 @@
-import { Module, forwardRef } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 
 import { AuthService } from ".";
 import { ApiModule } from "../api/api.module";

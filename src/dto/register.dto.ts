@@ -1,6 +1,3 @@
-import { EMAIL as EMAIL_BLACKLISTED_CHARS } from "@/common/util/blacklist";
-import { PORTAL } from "@/common/server/portal";
-
 import {
   IsEmail,
   IsEnum,
@@ -8,7 +5,11 @@ import {
   Length,
   ValidationArguments,
 } from "class-validator";
+
 import { getEmailErrorMessage } from "@/dto/functions";
+
+import { PORTAL } from "@/common/server/portal";
+import { EMAIL as EMAIL_BLACKLISTED_CHARS } from "@/common/util/blacklist";
 
 export class RegisterDTO {
   @IsEmail(
@@ -20,7 +21,7 @@ export class RegisterDTO {
         const error: string = getEmailErrorMessage(validationArguments);
         return error;
       },
-    }
+    },
   )
   readonly email: string;
 

@@ -1,16 +1,16 @@
 import { Module } from "@nestjs/common";
 import { ConfigModule } from "@nestjs/config";
 
-import { AppService } from "@/app.service";
 import defaultConfiguration from "@/config";
-import { AppController } from "@/app.controller";
+import nestConfiguration, { validate } from "@/nestjs/config";
+
 import { ApiModule } from "@/app/api/api.module";
 import { AuthModule } from "@/app/auth/auth.module";
-import { UserModule } from "@/app/user/user.module";
 import { RelayModule } from "@/app/relay/relay.module";
-import nestConfiguration, { validate } from "@/nestjs/config";
-import { MongooseDatabaseModule } from "@/nestjs/db/mongo/database.module";
-import { MongooseModelsModule } from "@/nestjs/db/mongo/mongoose-models.module";
+import { UserModule } from "@/app/user/user.module";
+
+import { AppController } from "@/app.controller";
+import { AppService } from "@/app.service";
 
 @Module({
   imports: [
@@ -25,8 +25,6 @@ import { MongooseModelsModule } from "@/nestjs/db/mongo/mongoose-models.module";
     AuthModule,
     UserModule,
     RelayModule,
-    MongooseModelsModule,
-    MongooseDatabaseModule,
   ],
   controllers: [AppController],
   providers: [AppService],

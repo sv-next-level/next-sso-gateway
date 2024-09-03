@@ -1,4 +1,4 @@
-import { Module, forwardRef } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 
 import { UserService } from ".";
 import { ApiModule } from "../api/api.module";

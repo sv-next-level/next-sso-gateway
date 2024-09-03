@@ -1,10 +1,10 @@
 import { HttpModule } from "@nestjs/axios";
-import { Module, forwardRef } from "@nestjs/common";
+import { forwardRef, Module } from "@nestjs/common";
 
 import { ApiController, ApiService } from ".";
 import { AuthModule } from "../auth/auth.module";
-import { UserModule } from "../user/user.module";
 import { RelayModule } from "../relay/relay.module";
+import { UserModule } from "../user/user.module";
 
 @Module({
   imports: [

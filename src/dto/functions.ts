@@ -1,9 +1,10 @@
-import { EMAIL as EMAIL_BLACKLISTED_CHARS } from "@/common/util/blacklist";
-import { emailBlacklistedChars } from "@/common/util/regex";
 import { ValidationArguments } from "class-validator";
 
+import { EMAIL as EMAIL_BLACKLISTED_CHARS } from "@/common/util/blacklist";
+import { emailBlacklistedChars } from "@/common/util/regex";
+
 export const getEmailErrorMessage = (
-  validationArguments: ValidationArguments
+  validationArguments: ValidationArguments,
 ): string => {
   const email: string = validationArguments.value;
   const blacklisted_chars_array: string[] = EMAIL_BLACKLISTED_CHARS.split("");

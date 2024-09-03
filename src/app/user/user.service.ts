@@ -1,10 +1,13 @@
+import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { Inject, Injectable, Logger, forwardRef } from "@nestjs/common";
+
+import { PasswordDTO, UserDTO } from "@/dto";
+
+import { METHOD } from "@/common/api/method";
+
+import { InternalServerError } from "@/utils";
 
 import { ApiService } from "../api";
-import { METHOD } from "@/common/api/method";
-import { InternalServerError } from "@/utils";
-import { PasswordDTO, UserDTO } from "@/dto";
 
 @Injectable()
 export class UserService {
@@ -14,7 +17,7 @@ export class UserService {
   constructor(
     @Inject(forwardRef(() => ApiService))
     private readonly apiService: ApiService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {
     this.logger.debug({
       message: "Entering constructor of user service",
@@ -34,7 +37,7 @@ export class UserService {
       const { user_id: userId } = await this.apiService.call(
         url,
         METHOD.POST,
-        userDto
+        userDto,
       );
 
       if (!userId) {
@@ -68,7 +71,7 @@ export class UserService {
       const { user_id: userId } = await this.apiService.call(
         url,
         METHOD.POST,
-        userDto
+        userDto,
       );
 
       if (!userId) {
@@ -103,7 +106,7 @@ export class UserService {
       const { result: isValid } = await this.apiService.call(
         url,
         METHOD.POST,
-        passwordDto
+        passwordDto,
       );
 
       if (typeof isValid !== Boolean.name.toLowerCase()) {
@@ -138,7 +141,7 @@ export class UserService {
       const { password_id: passwordId } = await this.apiService.call(
         url,
         METHOD.POST,
-        passwordDto
+        passwordDto,
       );
 
       if (!passwordId) {

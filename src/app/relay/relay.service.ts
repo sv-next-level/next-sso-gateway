@@ -1,10 +1,13 @@
+import { forwardRef, Inject, Injectable, Logger } from "@nestjs/common";
 import { ConfigService } from "@nestjs/config";
-import { Inject, Injectable, Logger, forwardRef } from "@nestjs/common";
+
+import { ResendEmailDTO, SendEmailDTO, VerifyEmailDTO } from "@/dto";
+
+import { METHOD } from "@/common/api/method";
+
+import { InternalServerError } from "@/utils";
 
 import { ApiService } from "../api";
-import { METHOD } from "@/common/api/method";
-import { InternalServerError } from "@/utils";
-import { ResendEmailDTO, SendEmailDTO, VerifyEmailDTO } from "@/dto";
 
 @Injectable()
 export class RelayService {
@@ -14,7 +17,7 @@ export class RelayService {
   constructor(
     @Inject(forwardRef(() => ApiService))
     private readonly apiService: ApiService,
-    private readonly configService: ConfigService
+    private readonly configService: ConfigService,
   ) {
     this.logger.debug({
       message: "Entering constructor of relay service",
@@ -98,7 +101,7 @@ export class RelayService {
       const { result: verification } = await this.apiService.call(
         url,
         METHOD.POST,
-        emailDto
+        emailDto,
       );
 
       if (typeof verification !== Boolean.name.toLowerCase()) {
